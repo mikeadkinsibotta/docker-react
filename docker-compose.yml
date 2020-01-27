@@ -1,0 +1,26 @@
+version: '3'
+services:
+    web:
+        build: 
+            # Sets the context of where to start looking for files.  This says current directory
+            context: .
+            # Name of the docer file
+            dockerfile: Dockerfile.dev
+        ports: 
+            # Port Mapping
+            - "3000:3000"
+        volumes:
+            # No colon means don't map the node_modules class
+            - /app/node_modules
+            # Colon means map everything in the working directory to everything inside /app, any changes in the working directory will be reflected in the same file in /app
+            # Except the node_modules.
+            - .:/app
+    test:
+        build: 
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes:
+            - /app/node_modules
+            - .:/app
+        # Change CMD to npm test override what is in the Dockerfile.dev
+        command: ["npm", "test"]
